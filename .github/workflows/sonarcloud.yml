@@ -6,6 +6,11 @@ on:
       - master
 
   workflow_dispatch:
+    inputs:
+      project:
+        description: "Proyecto a analizar"
+        required: true
+        default: ""
 
 jobs:
   sonarcloud:
@@ -15,6 +20,8 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -23,11 +30,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          pip install requests
 
       - name: Execute automation script
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          PROJECT_NAME: ${{ github.event.inputs.project }}
         run: |
           python automation/sonarcloud_automation.py
 
@@ -36,4 +44,4 @@ jobs:
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         with:
-          projectBaseDir: app
+          projectBaseDir: ${{ github.event.inputs.project }}

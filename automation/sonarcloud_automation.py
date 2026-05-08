@@ -108,7 +108,7 @@ sonar.host.url=https://sonarcloud.io
 def main():
 
     # Carpeta del código a analizar
-    project_path = "./app"
+    project_path = f"./{os.getenv('PROJECT_NAME')}"
 
     if not os.path.exists(project_path):
         print("[!] Proyecto no encontrado")
