@@ -10,7 +10,7 @@ on:
       project:
         description: "Proyecto a analizar"
         required: true
-        default: ""
+        default: "pygoat"
 
 jobs:
   sonarcloud:
