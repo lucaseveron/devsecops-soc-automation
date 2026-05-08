@@ -1,19 +1,15 @@
-# Variables necesarias
-
-SONAR_TOKEN = os.getenv("SONAR_TOKEN")
-ORGANIZATION = "pipeline-jenkins"
-
 import os
 import requests
-import subprocess
 from pathlib import Path
 
 # =====================================
 # CONFIG
 # =====================================
 
-SONAR_TOKEN = "TU_TOKEN"
+SONAR_TOKEN = os.getenv("SONAR_TOKEN")
+
 ORGANIZATION = "pipeline-jenkins"
+
 SONARCLOUD_URL = "https://sonarcloud.io"
 
 # =====================================
