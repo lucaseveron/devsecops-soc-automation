@@ -116,7 +116,7 @@ def main():
 
     project_name = os.path.basename(project_path)
 
-    project_key = f"lucas_{project_name}".replace(" ", "-")
+    project_key = f"pygoat{project_name}".replace(" ", "-")
 
     language = detect_language(project_path)
 
