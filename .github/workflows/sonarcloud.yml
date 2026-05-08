@@ -6,11 +6,6 @@ on:
       - master
 
   workflow_dispatch:
-    inputs:
-      project:
-        description: "Proyecto a analizar"
-        required: true
-        default: "pygoat"
 
 jobs:
   sonarcloud:
