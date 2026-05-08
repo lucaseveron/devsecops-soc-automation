@@ -3,7 +3,7 @@ name: SonarCloud Automation
 on:
   push:
     branches:
-      - main
+      - staging
 
   workflow_dispatch:
 
