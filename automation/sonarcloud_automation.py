@@ -116,8 +116,6 @@ def main():
 
     generate_properties(project_path, project_key, project_name)
 
-    run_scan(project_path)
-
     print("\n[+] Finalizado")
     print(f"https://sonarcloud.io/project/overview?id={project_key}")
 
