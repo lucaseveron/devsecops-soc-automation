@@ -94,29 +94,6 @@ sonar.token={SONAR_TOKEN}
     print("[+] sonar-project.properties generado")
 
 # =====================================
-# EJECUTAR SCAN
-# =====================================
-
-def run_scan(project_path):
-
-    print("[+] Ejecutando SonarScanner...")
-
-    result = subprocess.run(
-        ["sonar-scanner"],
-        cwd=project_path,
-        capture_output=True,
-        text=True
-    )
-
-    print(result.stdout)
-
-    if result.returncode == 0:
-        print("[+] Análisis completado")
-    else:
-        print("[!] Error en análisis")
-        print(result.stderr)
-
-# =====================================
 # MAIN
 # =====================================
 
