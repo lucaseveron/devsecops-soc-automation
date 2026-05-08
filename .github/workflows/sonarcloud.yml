@@ -1,4 +1,4 @@
-name: SonarCloud Automation
+name: SonarCloud Automation 
 
 on:
   push:
