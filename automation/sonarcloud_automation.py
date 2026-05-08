@@ -1,19 +1,15 @@
-# Variables necesarias
-
-SONAR_TOKEN = os.getenv("SONAR_TOKEN")
-ORGANIZATION = "pipeline-jenkins"
-
 import os
 import requests
-import subprocess
 from pathlib import Path
 
 # =====================================
 # CONFIG
 # =====================================
 
-SONAR_TOKEN = "TU_TOKEN"
+SONAR_TOKEN = os.getenv("SONAR_TOKEN")
+
 ORGANIZATION = "pipeline-jenkins"
+
 SONARCLOUD_URL = "https://sonarcloud.io"
 
 # =====================================
@@ -39,6 +35,7 @@ def detect_language(project_path):
 
     for root, _, files in os.walk(project_path):
         for file in files:
+
             ext = Path(file).suffix
 
             if ext in extensions:
@@ -72,8 +69,13 @@ def create_project(project_key, project_name):
 
     if response.status_code == 200:
         print(f"[+] Proyecto creado: {project_name}")
+
+    elif "already exists" in response.text.lower():
+        print(f"[!] El proyecto ya existe: {project_name}")
+
     else:
-        print(f"[!] Posiblemente ya existe: {response.text}")
+        print(f"[!] Error creando proyecto:")
+        print(response.text)
 
 # =====================================
 # GENERAR CONFIG
@@ -87,10 +89,12 @@ sonar.organization={ORGANIZATION}
 sonar.projectName={project_name}
 sonar.sources=.
 sonar.host.url=https://sonarcloud.io
-sonar.token={SONAR_TOKEN}
 """
 
-    properties_file = os.path.join(project_path, "sonar-project.properties")
+    properties_file = os.path.join(
+        project_path,
+        "sonar-project.properties"
+    )
 
     with open(properties_file, "w") as f:
         f.write(content)
@@ -98,41 +102,20 @@ sonar.token={SONAR_TOKEN}
     print("[+] sonar-project.properties generado")
 
 # =====================================
-# EJECUTAR SCAN
-# =====================================
-
-def run_scan(project_path):
-
-    print("[+] Ejecutando SonarScanner...")
-
-    result = subprocess.run(
-        ["sonar-scanner"],
-        cwd=project_path,
-        capture_output=True,
-        text=True
-    )
-
-    print(result.stdout)
-
-    if result.returncode == 0:
-        print("[+] Análisis completado")
-    else:
-        print("[!] Error en análisis")
-        print(result.stderr)
-
-# =====================================
 # MAIN
 # =====================================
 
 def main():
 
+    # Carpeta del código a analizar
     project_path = "./app"
 
     if not os.path.exists(project_path):
-        print("Proyecto no encontrado")
+        print("[!] Proyecto no encontrado")
         return
 
     project_name = os.path.basename(project_path)
+
     project_key = f"lucas_{project_name}".replace(" ", "-")
 
     language = detect_language(project_path)
@@ -141,12 +124,16 @@ def main():
 
     create_project(project_key, project_name)
 
-    generate_properties(project_path, project_key, project_name)
+    generate_properties(
+        project_path,
+        project_key,
+        project_name
+    )
 
-    run_scan(project_path)
-
-    print("\n[+] Finalizado")
-    print(f"https://sonarcloud.io/project/overview?id={project_key}")
+    print("\n[+] Configuración finalizada")
+    print(
+        f"https://sonarcloud.io/project/overview?id={project_key}"
+    )
 
 if __name__ == "__main__":
     main()
